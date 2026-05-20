@@ -1,0 +1,182 @@
+SHOW DATABASES;
+
+CREATE DATABASE VITCampus;
+CREATE DATABASE VITCampus1;
+SHOW DATABASES;
+
+DROP DATABASE VITCampus1;
+SHOW DATABASES;
+
+USE VITCampus;
+
+CREATE TABLE CSE (
+    sid INT8,
+    sname CHAR(30),
+    email VARCHAR(50)
+);
+
+CREATE TABLE EEE (
+    sid INT8,
+    sname CHAR(30),
+    email VARCHAR(50)
+);
+
+CREATE TABLE Mech (
+    sid INT8,
+    sname CHAR(30),
+    email VARCHAR(50)
+);
+
+SHOW TABLES;
+
+INSERT INTO CSE (sid, sname, email) VALUES 
+(1, 'abc', 'abc@vit.edu'),
+(2, 'bcd', 'bcd@vit.edu'),
+(3, 'cde', 'cde@vit.edu'),
+(4, 'def', 'def@vit.edu'),
+(5, 'efg', 'efg@vit.edu');
+
+INSERT INTO EEE (sid, sname, email) VALUES 
+(101, 'Rahul', 'rahul@vit.edu'),
+(102, 'Priya', 'priya@vit.edu'),
+(103, 'Amit', 'amit@vit.edu'),
+(104, 'Sana', 'sana@vit.edu'),
+(105, 'Arjun', 'arjun@vit.edu');
+
+INSERT INTO Mech (sid, sname, email) VALUES 
+(201, 'John', 'john@vit.edu'),
+(202, 'Vikram', 'vikram@vit.edu'),
+(203, 'Sneha', 'sneha@vit.edu'),
+(204, 'Rohit', 'rohit@vit.edu'),
+(205, 'Tara', 'tara@vit.edu');
+
+SELECT * FROM CSE;
+SELECT * FROM EEE;
+SELECT * FROM Mech;
+
+
+ALTER TABLE CSE MODIFY COLUMN sname VARCHAR(50);
+UPDATE CSE SET sname = 'Anshul' WHERE sid = 1;
+
+ALTER TABLE EEE RENAME COLUMN email TO college_email;
+UPDATE EEE SET college_email = 'priya.new@vit.edu' WHERE sid = 102;
+
+ALTER TABLE Mech ALTER COLUMN email SET DEFAULT 'student@vit.edu';
+UPDATE Mech SET sid = 206 WHERE sname = 'John';
+
+DESCRIBE CSE;
+DESCRIBE EEE;
+DESCRIBE Mech;
+
+SELECT * FROM CSE;
+SELECT * FROM EEE;
+SELECT * FROM Mech;
+
+TRUNCATE TABLE Mech;
+SELECT * FROM Mech;
+
+DELETE FROM CSE WHERE sid = 5;
+
+SELECT * FROM CSE;
+
+UPDATE CSE 
+SET email = 'anshul.k@vit.edu' 
+WHERE sid = 1;
+
+UPDATE Mech 
+SET email = 'mech.student@vit.edu';
+
+SELECT * FROM CSE;
+SELECT * FROM Mech;
+
+
+
+
+
+
+
+
+
+CREATE DATABASE CompanyDB;
+USE CompanyDB;
+
+CREATE TABLE Worker (
+    WORKER_ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    FIRST_NAME CHAR(25),
+    LAST_NAME CHAR(25),
+    SALARY INT,
+    JOINING_DATE DATETIME,
+    DEPARTMENT CHAR(25)
+);
+
+INSERT INTO Worker 
+    (WORKER_ID, FIRST_NAME, LAST_NAME, SALARY, JOINING_DATE, DEPARTMENT) VALUES
+    (1, 'Monika', 'Arora', 100000, '2014-02-20 09:00:00', 'HR'),
+    (2, 'Niharika', 'Verma', 80000, '2014-06-11 09:00:00', 'Admin'),
+    (3, 'Vishal', 'Singhal', 300000, '2014-02-20 09:00:00', 'HR'),
+    (4, 'Amitabh', 'Singh', 500000, '2014-02-20 09:00:00', 'Admin'),
+    (5, 'Vivek', 'Bhati', 500000, '2014-06-11 09:00:00', 'Admin'),
+    (6, 'Vipul', 'Diwan', 200000, '2014-06-11 09:00:00', 'Account'),
+    (7, 'Satish', 'Kumar', 75000, '2014-01-20 09:00:00', 'Account'),
+    (8, 'Geetika', 'Chauhan', 90000, '2014-04-11 09:00:00', 'Admin');
+
+SELECT * FROM Worker;
+UPDATE worker SET salary = salary + 5000;
+
+START TRANSACTION;
+
+UPDATE Worker SET SALARY = SALARY + 5000;
+SELECT * FROM Worker;
+
+SAVEPOINT time15;
+
+DELETE FROM Worker WHERE DEPARTMENT = 'HR';
+
+SAVEPOINT time16;
+
+SELECT * FROM Worker;
+
+INSERT INTO Worker (WORKER_ID, FIRST_NAME, LAST_NAME, SALARY, JOINING_DATE, DEPARTMENT) 
+VALUES (9, 'Tina', 'Rai', 60000, '2014-05-12 09:00:00', 'Admin');
+
+SAVEPOINT time17;
+
+ROLLBACK TO time17;
+
+INSERT INTO Worker (WORKER_ID, FIRST_NAME, LAST_NAME, SALARY, JOINING_DATE, DEPARTMENT) 
+VALUES (10, 'Yash', 'Goel', 65000, '2014-07-15 09:00:00', 'Account');
+
+SAVEPOINT time18;
+
+ROLLBACK TO time17;
+
+SELECT * FROM Worker;
+
+COMMIT;
+
+SELECT FIRST_NAME, SALARY 
+FROM Worker 
+WHERE DEPARTMENT = 'HR';
+
+SELECT FIRST_NAME, LAST_NAME, SALARY 
+FROM Worker 
+WHERE SALARY > 200000;
+
+SELECT FIRST_NAME, SALARY 
+FROM Worker 
+WHERE SALARY BETWEEN 100000 AND 300000;
+
+SELECT FIRST_NAME, DEPARTMENT FROM Worker WHERE DEPARTMENT = 'Admin';
+SELECT FIRST_NAME, DEPARTMENT FROM Worker WHERE DEPARTMENT != 'HR';
+SELECT FIRST_NAME, SALARY FROM Worker WHERE SALARY > 100000;
+SELECT FIRST_NAME, SALARY FROM Worker WHERE SALARY < 100000;
+SELECT FIRST_NAME, SALARY FROM Worker WHERE SALARY >= 200000;
+
+SELECT FIRST_NAME, SALARY, (SALARY + 10000) AS TOTAL_PAYOUT FROM Worker;
+SELECT FIRST_NAME, SALARY, (SALARY - 5000) AS TAKE_HOME FROM Worker;
+SELECT FIRST_NAME, SALARY, (SALARY * 12) AS ANNUAL_CTC FROM Worker;
+SELECT FIRST_NAME, SALARY, (SALARY / 4) AS QUARTERLY_PAY FROM Worker;
+
+SELECT FIRST_NAME, SALARY, DEPARTMENT FROM Worker WHERE DEPARTMENT = 'Admin' AND SALARY > 100000;
+SELECT FIRST_NAME, DEPARTMENT FROM Worker WHERE DEPARTMENT = 'HR' OR DEPARTMENT = 'Account';
+SELECT FIRST_NAME, DEPARTMENT FROM Worker WHERE NOT DEPARTMENT IN ('HR', 'Admin');
