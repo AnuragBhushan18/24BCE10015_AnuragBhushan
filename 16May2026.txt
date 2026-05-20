@@ -1,0 +1,25 @@
+show databases;
+create database VITCampus;
+create database VITCampus1;
+show databases;
+drop database VITCampus1;
+show databases;
+use VITCampus;
+create table CSE(
+sid int8,
+sname char(30)
+);
+create table EEE(
+sid int8,
+sname char(30)
+);
+create table Mech(
+sid int8,
+sname char(30)
+);
+show tables;
+insert into cse values( 1 , 'abc');
+insert into cse values( 2 , 'bcd');
+insert into cse values( 3 , 'cde');
+insert into cse values( 4 , 'def');
+insert into cse values( 5 , 'efg');
