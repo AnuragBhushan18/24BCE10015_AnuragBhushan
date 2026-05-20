@@ -1,0 +1,95 @@
+SELECT DISTINCT email FROM CSE;
+SELECT DISTINCT sname FROM EEE;
+SELECT COUNT(DISTINCT sname) AS UNIQUE_STUDENT_NAMES FROM CSE;
+SELECT sname, COUNT(*) AS NAME_FREQUENCY 
+FROM Mech 
+GROUP BY sname;
+
+ALTER TABLE Mech ALTER COLUMN email DROP DEFAULT;
+ALTER TABLE Worker MODIFY COLUMN WORKER_ID INT NOT NULL;
+ALTER TABLE Worker DROP PRIMARY KEY;
+
+CREATE TABLE Student_Records (
+    student_id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(50) NOT NULL,
+    college_email VARCHAR(50) UNIQUE,
+    age INT CHECK (age >= 17),
+    admission_quota VARCHAR(20) DEFAULT 'General'
+);
+
+CREATE TABLE Course_Details (
+    course_id VARCHAR(10) PRIMARY KEY,
+    course_name VARCHAR(50) NOT NULL UNIQUE,
+    credits INT CHECK (credits BETWEEN 1 AND 5),
+    department VARCHAR(20) DEFAULT 'General'
+);
+
+CREATE TABLE Faculty_Records (
+    faculty_id INT AUTO_INCREMENT PRIMARY KEY,
+    faculty_name VARCHAR(50) NOT NULL,
+    personal_email VARCHAR(50) UNIQUE NOT NULL,
+    experience_years INT CHECK (experience_years >= 0),
+    status VARCHAR(15) DEFAULT 'Active'
+);
+
+INSERT INTO Student_Records (full_name, college_email, age, admission_quota) VALUES 
+('Aman Verma', 'aman.v@vit.edu', 18, 'General'),
+('Sneha Reddy', 'sneha.r@vit.edu', 19, 'Management'),
+('Vikram Singh', 'vikram.s@vit.edu', 21, 'General'),
+('Ananya Das', 'ananya.d@vit.edu', 17, 'NRI'),
+('Rohan Mehta', 'rohan.m@vit.edu', 20, 'General');
+
+INSERT INTO Course_Details (course_id, course_name, credits, department) VALUES 
+('CS201', 'Operating Systems', 4, 'CSE'),
+('EE101', 'Basic Electrical', 3, 'EEE'),
+('ME302', 'Thermodynamics', 4, 'Mech'),
+('CS303', 'Cyber Security', 3, 'CSE'),
+('MA102', 'Applied Mathematics', 4, 'General');
+
+INSERT INTO Faculty_Records (faculty_name, personal_email, experience_years, status) VALUES 
+('Dr. Suresh Kumar', 'suresh.k@vit.edu', 12, 'Active'),
+('Prof. Kavita Rao', 'kavita.r@vit.edu', 6, 'Active'),
+('Dr. Manish Patel', 'manish.p@vit.edu', 15, 'Active'),
+('Prof. Neha Gupta', 'neha.g@vit.edu', 4, 'On Leave'),
+('Dr. Alok Mishra', 'alok.m@vit.edu', 9, 'Active');
+
+SELECT * FROM Student_Records;
+SELECT * FROM Course_Details;
+SELECT * FROM Faculty_Records;
+
+
+ALTER TABLE Student_Records ALTER COLUMN admission_quota DROP DEFAULT;
+ALTER TABLE Student_Records DROP CHECK Student_Records_chk_1;
+ALTER TABLE Student_Records DROP INDEX college_email;
+
+ALTER TABLE Course_Details ALTER COLUMN department DROP DEFAULT;
+ALTER TABLE Course_Details DROP CHECK Course_Details_chk_1;
+ALTER TABLE Course_Details DROP INDEX course_name;
+
+ALTER TABLE Faculty_Records ALTER COLUMN status DROP DEFAULT;
+ALTER TABLE Faculty_Records DROP CHECK Faculty_Records_chk_1;
+ALTER TABLE Faculty_Records DROP INDEX personal_email;
+
+CREATE TABLE Enrollments (
+    enrollment_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
+    course_id VARCHAR(10),
+    enrollment_date DATE DEFAULT (CURRENT_DATE),
+    CONSTRAINT fk_student FOREIGN KEY (student_id) REFERENCES Student_Records(student_id),
+    CONSTRAINT fk_course FOREIGN KEY (course_id) REFERENCES Course_Details(course_id)
+);
+
+INSERT INTO Enrollments (student_id, course_id) VALUES 
+(1, 'CS201'),
+(2, 'EE101'),
+(3, 'CS201'),
+(4, 'MA102'),
+(5, 'ME302');
+
+SELECT * FROM Enrollments;
+
+INSERT INTO Enrollments (student_id, course_id) VALUES (999, 'CS201');
+
+INSERT INTO Enrollments (student_id, course_id) VALUES ('abc', 'CS201');
+
+INSERT INTO Enrollments (student_id, course_id) VALUES (NULL, 'CS201');
