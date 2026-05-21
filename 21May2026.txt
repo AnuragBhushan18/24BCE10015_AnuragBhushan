@@ -1,0 +1,119 @@
+CREATE TABLE category(
+    cid INT PRIMARY KEY,
+    cname VARCHAR(100) NOT NULL
+);
+
+INSERT INTO category VALUES
+(101,'Electronics'),
+(102,'Home Appliances'),
+(103,'Furniture'),
+(104,'Fashion'),
+(105,'Books');
+
+SELECT * FROM category;
+
+CREATE TABLE products(
+    pid INT PRIMARY KEY,
+    pname VARCHAR(100) NOT NULL,
+    cid INT,
+
+    FOREIGN KEY (cid)
+    REFERENCES category(cid)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+INSERT INTO products VALUES
+(1,'Power Bank',101),
+(2,'Samsung Charger',101),
+(3,'Mixer Grinder',102),
+(4,'Air Conditioner',102),
+(5,'Wooden Table',103),
+(6,'Office Chair',103),
+(7,'T-Shirt',104),
+(8,'Jeans',104),
+(9,'Java Programming Book',105),
+(10,'Data Structures Book',105);
+
+SELECT * FROM products;
+
+DELETE FROM category
+WHERE cid = 101;
+
+SELECT * FROM category;
+
+SELECT * FROM products;
+
+UPDATE category
+SET cid = 202
+WHERE cid = 102;
+
+SELECT * FROM category;
+
+SELECT * FROM products;
+
+
+
+CREATE TABLE department(
+    dept_id INT PRIMARY KEY,
+    dept_name VARCHAR(100)
+);
+
+INSERT INTO department VALUES
+(101,'IT'),
+(102,'HR'),
+(103,'Finance');
+
+CREATE TABLE employee(
+    emp_id INT PRIMARY KEY,
+    emp_name VARCHAR(100),
+    salary INT,
+    dept_id INT,
+    FOREIGN KEY(dept_id)
+    REFERENCES department(dept_id)
+);
+
+INSERT INTO employee VALUES
+(1,'Amit',50000,101),
+(2,'Rahul',60000,101),
+(3,'Neha',45000,102),
+(4,'Priya',70000,103),
+(5,'Karan',55000,102);
+
+SELECT e.emp_name, d.dept_name
+FROM employee e
+JOIN department d
+ON e.dept_id = d.dept_id;
+
+SELECT e.emp_name, e.salary, d.dept_name
+FROM employee e
+JOIN department d
+ON e.dept_id = d.dept_id
+ORDER BY e.salary DESC;
+
+SELECT d.dept_name, COUNT(*) AS total_employees
+FROM employee e
+JOIN department d
+ON e.dept_id = d.dept_id
+GROUP BY d.dept_name;
+
+SELECT d.dept_name, AVG(e.salary) AS average_salary
+FROM employee e
+JOIN department d
+ON e.dept_id = d.dept_id
+GROUP BY d.dept_name
+ORDER BY average_salary DESC;
+
+SELECT e.emp_name, e.salary, d.dept_name
+FROM employee e
+JOIN department d
+ON e.dept_id = d.dept_id
+ORDER BY e.salary DESC
+LIMIT 3;
+
+SELECT e.emp_name, e.salary, d.dept_name
+FROM employee e
+JOIN department d
+ON e.dept_id = d.dept_id
+ORDER BY e.salary DESC
+LIMIT 2 OFFSET 1;
