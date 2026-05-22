@@ -1,0 +1,112 @@
+1. Write an SQL query to fetch “FIRST_NAME” from Worker table using the alias name as <WORKER_NAME>
+
+SELECT FIRST_NAME AS WORKER_NAME
+FROM Worker;
+
+
+
+
+2. Write an SQL query to fetch unique values of DEPARTMENT from Worker table.
+
+SELECT DISTINCT DEPARTMENT
+FROM Worker;
+
+
+
+
+
+
+3. Write an SQL query to print details for Workers with the first name as “Vipul” and “Satish” from Worker table. (without OR condition)
+
+
+SELECT * FROM Worker
+WHERE FIRST_NAME IN ('Vipul', 'Satish');
+
+
+
+
+
+
+4. Write an SQL query to print details of the Workers whose FIRST_NAME contains ‘a’.
+
+SELECT * FROM Worker
+WHERE FIRST_NAME LIKE '%a%';
+
+
+
+
+
+5. Write an SQL query to print details of the Workers whose FIRST_NAME ends with ‘a’.
+
+SELECT * FROM Worker
+WHERE FIRST_NAME LIKE '%a';
+
+
+
+
+
+6. Write an SQL query to print details of the admin whose SALARY lies between 100000 and 500000.
+
+SELECT * FROM Worker
+WHERE DEPARTMENT = 'Admin'
+AND SALARY BETWEEN 100000 AND 500000;
+
+
+
+
+
+7. Write an SQL query to fetch the count of employees working in the department ‘Admin’
+
+SELECT COUNT(*) FROM Worker
+WHERE DEPARTMENT = 'Admin';
+
+
+
+
+
+
+
+8. Write an SQL query to show the second highest salary from a table.
+
+SELECT MAX(SALARY) AS Second_Highest_Salary
+FROM Worker
+WHERE SALARY < (
+    SELECT MAX(SALARY)
+    FROM Worker
+);
+
+
+
+
+
+
+
+9.Write an SQL query to fetch the departments that have less than three people in it.
+
+SELECT DEPARTMENT, COUNT(*) AS Total_Employees
+FROM Worker GROUP BY DEPARTMENT
+HAVING COUNT(*) < 3;
+
+
+
+
+
+
+10. Write an SQL query to show all departments along with the total number of people in there.
+
+SELECT DEPARTMENT, COUNT(*) AS Total_People
+FROM Worker
+GROUP BY DEPARTMENT;
+
+
+
+
+
+11.Write an SQLquery to print the name of employees having the highest salary in each department.
+
+SELECT FIRST_NAME, DEPARTMENT, SALARY FROM Worker w1
+WHERE SALARY = (
+    SELECT MAX(SALARY)
+    FROM Worker w2
+    WHERE w1.DEPARTMENT = w2.DEPARTMENT
+);
