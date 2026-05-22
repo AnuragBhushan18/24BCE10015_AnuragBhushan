@@ -1,0 +1,47 @@
+use vitcampus;
+
+create table departments(
+did int primary key,
+dname varchar(25) not null unique
+);
+
+
+insert into departments values 
+(101, 'CSE'),
+(102, 'ECE'),
+(103, 'Civil'),
+(106, 'Aero'),
+(107, 'Mechanical');
+
+select * from departments order by did;
+
+create table hod(
+hid int primary key,
+hname varchar(100) not null,
+dept_id int,
+foreign key(dept_id) references departments(did)
+);
+
+insert into hod values
+(1, 'Rajesh Sharma', 101),
+(2, 'Anita Verma', 102),
+(3, 'Suresh Kumar', 103),
+(4, 'Vikram Singh', 106),
+(5, 'Neha Gupta', 107);
+
+select * from hod;
+
+select * from
+departments cross join hod order by dept_id asc;
+
+select * 
+from departments
+inner join hod
+on departments.did = hod.dept_id;
+
+
+select * from departments natural join hod;
+
+select * from departments left outer join hod 
+on departments.did = hod.dept_id
+order by did asc;
