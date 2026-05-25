@@ -1,0 +1,83 @@
+use vitcampus
+switched to db vitcampus
+
+db.students.insertOne({
+   name: "Anurag",
+   age: 20,
+   course: "CSE"
+})
+{
+  acknowledged: true,
+  insertedId: ObjectId('6a14590ecbeb1109d9b52691')
+}
+db.students.find()
+{
+  _id: ObjectId('6a14590ecbeb1109d9b52691'),
+  name: 'Anurag',
+  age: 20,
+  course: 'CSE'
+}
+db.students.find()
+{
+  _id: ObjectId('6a14590ecbeb1109d9b52691'),
+  name: 'Anurag',
+  age: 20,
+  course: 'CSE'
+}
+db.students.insertMany([
+   {
+      name: "Anurag",
+      age: 20,
+      course: "CSE"
+   },
+   {
+      name: "Rahul",
+      age: 21,
+      course: "IT"
+   },
+   {
+      name: "Priya",
+      age: 19,
+      course: "ECE"
+   },
+   {
+      name: "Aman",
+      age: 22,
+      course: "ME"
+   }
+])
+
+db.students.find()
+{
+  _id: ObjectId('6a14590ecbeb1109d9b52691'),
+  name: 'Anurag',
+  age: 20,
+  course: 'CSE'
+}
+{
+  _id: ObjectId('6a145beecbeb1109d9b52692'),
+  name: 'Anurag',
+  age: 20,
+  course: 'CSE'
+}
+{
+  _id: ObjectId('6a145beecbeb1109d9b52693'),
+  name: 'Rahul',
+  age: 21,
+  course: 'IT'
+}
+{
+  _id: ObjectId('6a145beecbeb1109d9b52694'),
+  name: 'Priya',
+  age: 19,
+  course: 'ECE'
+}
+{
+  _id: ObjectId('6a145beecbeb1109d9b52695'),
+  name: 'Aman',
+  age: 22,
+  course: 'ME'
+}
+vitcampus
+
+
