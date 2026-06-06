@@ -1,0 +1,667 @@
+db.sales.insertMany([
+	{ "_id" : 1, "item" : "Americanos", "price" : 5, "size": "Short", "quantity" : 22, "date" : ISODate("2022-01-15T08:00:00Z") },
+	{ "_id" : 2, "item" : "Cappuccino", "price" : 6, "size": "Short","quantity" : 12, "date" : ISODate("2022-01-16T09:00:00Z") },
+	{ "_id" : 3, "item" : "Lattes", "price" : 15, "size": "Grande","quantity" : 25, "date" : ISODate("2022-01-16T09:05:00Z") },
+	{ "_id" : 4, "item" : "Mochas", "price" : 25,"size": "Tall", "quantity" : 11, "date" : ISODate("2022-02-17T08:00:00Z") },
+	{ "_id" : 5, "item" : "Americanos", "price" : 10, "size": "Grande","quantity" : 12, "date" : ISODate("2022-02-18T21:06:00Z") },
+	{ "_id" : 6, "item" : "Cappuccino", "price" : 7, "size": "Tall","quantity" : 20, "date" : ISODate("2022-02-20T10:07:00Z") },
+	{ "_id" : 7, "item" : "Lattes", "price" : 25,"size": "Tall", "quantity" : 30, "date" : ISODate("2022-02-21T10:08:00Z") },
+	{ "_id" : 8, "item" : "Americanos", "price" : 10, "size": "Grande","quantity" : 21, "date" : ISODate("2022-02-22T14:09:00Z") },
+	{ "_id" : 9, "item" : "Cappuccino", "price" : 10, "size": "Grande","quantity" : 17, "date" : ISODate("2022-02-23T14:09:00Z") },
+	{ "_id" : 10, "item" : "Americanos", "price" : 8, "size": "Tall","quantity" : 15, "date" : ISODate("2022-02-25T14:09:00Z")}
+]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': 1,
+    '1': 2,
+    '2': 3,
+    '3': 4,
+    '4': 5,
+    '5': 6,
+    '6': 7,
+    '7': 8,
+    '8': 9,
+    '9': 10
+  }
+}
+db.sales.find()
+{
+  _id: 1,
+  item: 'Americanos',
+  price: 5,
+  size: 'Short',
+  quantity: 22,
+  date: 2022-01-15T08:00:00.000Z
+}
+{
+  _id: 2,
+  item: 'Cappuccino',
+  price: 6,
+  size: 'Short',
+  quantity: 12,
+  date: 2022-01-16T09:00:00.000Z
+}
+{
+  _id: 3,
+  item: 'Lattes',
+  price: 15,
+  size: 'Grande',
+  quantity: 25,
+  date: 2022-01-16T09:05:00.000Z
+}
+{
+  _id: 4,
+  item: 'Mochas',
+  price: 25,
+  size: 'Tall',
+  quantity: 11,
+  date: 2022-02-17T08:00:00.000Z
+}
+{
+  _id: 5,
+  item: 'Americanos',
+  price: 10,
+  size: 'Grande',
+  quantity: 12,
+  date: 2022-02-18T21:06:00.000Z
+}
+{
+  _id: 6,
+  item: 'Cappuccino',
+  price: 7,
+  size: 'Tall',
+  quantity: 20,
+  date: 2022-02-20T10:07:00.000Z
+}
+{
+  _id: 7,
+  item: 'Lattes',
+  price: 25,
+  size: 'Tall',
+  quantity: 30,
+  date: 2022-02-21T10:08:00.000Z
+}
+{
+  _id: 8,
+  item: 'Americanos',
+  price: 10,
+  size: 'Grande',
+  quantity: 21,
+  date: 2022-02-22T14:09:00.000Z
+}
+{
+  _id: 9,
+  item: 'Cappuccino',
+  price: 10,
+  size: 'Grande',
+  quantity: 17,
+  date: 2022-02-23T14:09:00.000Z
+}
+{
+  _id: 10,
+  item: 'Americanos',
+  price: 8,
+  size: 'Tall',
+  quantity: 15,
+  date: 2022-02-25T14:09:00.000Z
+}
+db.sales.getIndexes()
+[ { v: 2, key: { _id: 1 }, name: '_id_' } ]
+db.sales.find({
+  item: "Americanos"
+}).explain("executionStats")
+{
+      stage: 'COLLSCAN',
+      filter: {
+        item: {
+          '$eq': 'Americanos'
+        }
+      },
+      nss: 'Swapnil.sales',
+      direction: 'forward'
+    },
+    rejectedPlans: []
+  },
+  executionStats: {
+    executionSuccess: true,
+    nReturned: 4,
+    executionTimeMillis: 7,
+    totalKeysExamined: 0,
+    totalDocsExamined: 10,
+    executionStages: {
+      isCached: false,
+      stage: 'COLLSCAN',
+      filter: {
+        item: {
+          '$eq': 'Americanos'
+        }
+      },
+      nReturned: 4,
+      executionTimeMillisEstimate: 0,
+      works: 11,
+      advanced: 4,
+      needTime: 6,
+      needYield: 0,
+      saveState: 0,
+      restoreState: 0,
+      isEOF: 1,
+      nss: 'Swapnil.sales',
+      direction: 'forward',
+      docsExamined: 10
+    }
+  },
+  queryShapeHash: 'A4127D30BFD27323463E23DD10175A3024F58094E4B180FDBF31879F33CD34FF',
+  command: {
+    find: 'sales',
+    filter: {
+      item: 'Americanos'
+    },
+    '$db': 'Swapnil'
+  },
+  serverInfo: {
+    host: 'Swapnil-Soni',
+    port: 27017,
+    version: '8.3.2',
+    gitVersion: '89f54eb32e217d2f7bfcad50e5919f3033bb9611'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted',
+    internalQueryPlannerIgnoreIndexWithCollationForRegex: 1
+  },
+  ok: 1
+}
+db.sales.createIndex({ item: 1 })
+item_1
+db.sales.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { item: 1 }, name: 'item_1' }
+]
+db.sales.find({
+  item: "Americanos"
+}).explain("executionStats")
+{
+        restoreState: 1,
+        isEOF: 1,
+        nss: 'Swapnil.sales',
+        keyPattern: {
+          item: 1
+        },
+        indexName: 'item_1',
+        isMultiKey: false,
+        multiKeyPaths: {
+          item: []
+        },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: {
+          item: [
+            '["Americanos", "Americanos"]'
+          ]
+        },
+        keysExamined: 4,
+        seeks: 1,
+        dupsTested: 0,
+        dupsDropped: 0,
+        peakTrackedMemBytes: 0
+      }
+    }
+  },
+  queryShapeHash: 'A4127D30BFD27323463E23DD10175A3024F58094E4B180FDBF31879F33CD34FF',
+  command: {
+    find: 'sales',
+    filter: {
+      item: 'Americanos'
+    },
+    '$db': 'Swapnil'
+  },
+  serverInfo: {
+    host: 'Swapnil-Soni',
+    port: 27017,
+    version: '8.3.2',
+    gitVersion: '89f54eb32e217d2f7bfcad50e5919f3033bb9611'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted',
+    internalQueryPlannerIgnoreIndexWithCollationForRegex: 1
+  },
+  ok: 1
+}
+db.sales.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { item: 1 }, name: 'item_1' }
+]
+db.sales.createIndex({ price: 1 })
+price_1
+db.sales.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { item: 1 }, name: 'item_1' },
+  { v: 2, key: { price: 1 }, name: 'price_1' }
+]
+
+db.users.drop()
+
+db.users.insertMany([
+   { email: "john@test.com", name: "john" },
+   { email: "jane@test.com", name: "jane" }
+])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6a241e625daf15abe85acd34'),
+    '1': ObjectId('6a241e625daf15abe85acd35')
+  }
+}
+db.users.createIndex(
+   { email: 1 },
+   { unique: true }
+)
+email_1
+db.users.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { email: 1 }, name: 'email_1', unique: true }
+]
+db.users.insertOne({
+   email: "john@test.com",
+   name: "johny"
+})
+MongoServerError: E11000 duplicate key error collection: Swapnil.users index: email_1 dup key: { email: "john@test.com" }
+db.users.find()
+{
+  _id: ObjectId('6a241e625daf15abe85acd34'),
+  email: 'john@test.com',
+  name: 'john'
+}
+{
+  _id: ObjectId('6a241e625daf15abe85acd35'),
+  email: 'jane@test.com',
+  name: 'jane'
+}
+db.users.createIndex(
+   { email: 1 },
+   { unique: true }
+)
+email_1
+db.users.deleteOne({
+   name: "johny",
+   email: "john@test.com"
+})
+{
+  acknowledged: true,
+  deletedCount: 0
+}
+db.users.insertOne({
+
+   email: "john@test.com",
+
+   name: "johny"
+
+})
+MongoServerError: E11000 duplicate key error collection: Swapnil.users index: email_1 dup key: { email: "john@test.com" }
+
+db.sales.find()
+{
+  _id: 1,
+  item: 'Americanos',
+  price: 5,
+  size: 'Short',
+  quantity: 22,
+  date: 2022-01-15T08:00:00.000Z
+}
+{
+  _id: 2,
+  item: 'Cappuccino',
+  price: 6,
+  size: 'Short',
+  quantity: 12,
+  date: 2022-01-16T09:00:00.000Z
+}
+{
+  _id: 3,
+  item: 'Lattes',
+  price: 15,
+  size: 'Grande',
+  quantity: 25,
+  date: 2022-01-16T09:05:00.000Z
+}
+{
+  _id: 4,
+  item: 'Mochas',
+  price: 25,
+  size: 'Tall',
+  quantity: 11,
+  date: 2022-02-17T08:00:00.000Z
+}
+{
+  _id: 5,
+  item: 'Americanos',
+  price: 10,
+  size: 'Grande',
+  quantity: 12,
+  date: 2022-02-18T21:06:00.000Z
+}
+{
+  _id: 6,
+  item: 'Cappuccino',
+  price: 7,
+  size: 'Tall',
+  quantity: 20,
+  date: 2022-02-20T10:07:00.000Z
+}
+{
+  _id: 7,
+  item: 'Lattes',
+  price: 25,
+  size: 'Tall',
+  quantity: 30,
+  date: 2022-02-21T10:08:00.000Z
+}
+{
+  _id: 8,
+  item: 'Americanos',
+  price: 10,
+  size: 'Grande',
+  quantity: 21,
+  date: 2022-02-22T14:09:00.000Z
+}
+{
+  _id: 9,
+  item: 'Cappuccino',
+  price: 10,
+  size: 'Grande',
+  quantity: 17,
+  date: 2022-02-23T14:09:00.000Z
+}
+{
+  _id: 10,
+  item: 'Americanos',
+  price: 8,
+  size: 'Tall',
+  quantity: 15,
+  date: 2022-02-25T14:09:00.000Z
+}
+db.sales.createIndex({
+
+   item: 1,
+
+   price: 1
+
+})
+item_1_price_1
+db.sales.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { item: 1 }, name: 'item_1' },
+  { v: 2, key: { price: 1 }, name: 'price_1' },
+  { v: 2, key: { item: 1, price: 1 }, name: 'item_1_price_1' }
+]
+db.sales.find({
+
+   item: "Americanos",
+
+   price: 10
+
+}).explain("executionStats")
+{
+        keyPattern: {
+          item: 1,
+          price: 1
+        },
+        indexName: 'item_1_price_1',
+        isMultiKey: false,
+        multiKeyPaths: {
+          item: [],
+          price: []
+        },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: {
+          item: [
+            '["Americanos", "Americanos"]'
+          ],
+          price: [
+            '[10, 10]'
+          ]
+        },
+        keysExamined: 2,
+        seeks: 1,
+        dupsTested: 0,
+        dupsDropped: 0,
+        peakTrackedMemBytes: 0
+      }
+    }
+  },
+  queryShapeHash: '36BD96D07DE548DBFE091532A8F1E8BF84F4635275C71015C56ADE9D7D2DAF7F',
+  command: {
+    find: 'sales',
+    filter: {
+      item: 'Americanos',
+      price: 10
+    },
+    '$db': 'Swapnil'
+  },
+  serverInfo: {
+    host: 'Swapnil-Soni',
+    port: 27017,
+    version: '8.3.2',
+    gitVersion: '89f54eb32e217d2f7bfcad50e5919f3033bb9611'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted',
+    internalQueryPlannerIgnoreIndexWithCollationForRegex: 1
+  },
+  ok: 1
+}
+db.sales.find({
+
+   item: "Americanos"
+
+}).explain("executionStats")
+{
+        executionTimeMillisEstimate: 0,
+        works: 5,
+        advanced: 4,
+        needTime: 0,
+        needYield: 0,
+        saveState: 1,
+        restoreState: 1,
+        isEOF: 1,
+        nss: 'Swapnil.sales',
+        keyPattern: {
+          item: 1
+        },
+        indexName: 'item_1',
+        isMultiKey: false,
+        multiKeyPaths: {
+          item: []
+        },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: {
+          item: [
+            '["Americanos", "Americanos"]'
+          ]
+        },
+        keysExamined: 4,
+        seeks: 1,
+        dupsTested: 0,
+        dupsDropped: 0,
+        peakTrackedMemBytes: 0
+      }
+    }
+  },
+  queryShapeHash: 'A4127D30BFD27323463E23DD10175A3024F58094E4B180FDBF31879F33CD34FF',
+  command: {
+    find: 'sales',
+    filter: {
+      item: 'Americanos'
+    },
+    '$db': 'Swapnil'
+  },
+  serverInfo: {
+    host: 'Swapnil-Soni',
+    port: 27017,
+    version: '8.3.2',
+    gitVersion: '89f54eb32e217d2f7bfcad50e5919f3033bb9611'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted',
+    internalQueryPlannerIgnoreIndexWithCollationForRegex: 1
+  },
+  ok: 1
+}
+db.sales.find({
+
+   price: 10
+
+}).explain("executionStats")
+{
+        executionTimeMillisEstimate: 0,
+        works: 4,
+        advanced: 3,
+        needTime: 0,
+        needYield: 0,
+        saveState: 0,
+        restoreState: 0,
+        isEOF: 1,
+        nss: 'Swapnil.sales',
+        keyPattern: {
+          price: 1
+        },
+        indexName: 'price_1',
+        isMultiKey: false,
+        multiKeyPaths: {
+          price: []
+        },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: {
+          price: [
+            '[10, 10]'
+          ]
+        },
+        keysExamined: 3,
+        seeks: 1,
+        dupsTested: 0,
+        dupsDropped: 0,
+        peakTrackedMemBytes: 0
+      }
+    }
+  },
+  queryShapeHash: 'EDF671936621B99781F3461EF9BADF36F657D106FCE02ACA519668313AE1CC9C',
+  command: {
+    find: 'sales',
+    filter: {
+      price: 10
+    },
+    '$db': 'Swapnil'
+  },
+  serverInfo: {
+    host: 'Swapnil-Soni',
+    port: 27017,
+    version: '8.3.2',
+    gitVersion: '89f54eb32e217d2f7bfcad50e5919f3033bb9611'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted',
+    internalQueryPlannerIgnoreIndexWithCollationForRegex: 1
+  },
+  ok: 1
+}
+db.sales.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { item: 1 }, name: 'item_1' },
+  { v: 2, key: { price: 1 }, name: 'price_1' },
+  { v: 2, key: { item: 1, price: 1 }, name: 'item_1_price_1' }
+]
+db.sales.dropIndex("item_1")
+{ nIndexesWas: 4, ok: 1 }
+db.sales.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { price: 1 }, name: 'price_1' },
+  { v: 2, key: { item: 1, price: 1 }, name: 'item_1_price_1' }
+]
+db.sales.createIndex({ quantity: -1 })
+quantity_-1
+db.sales.dropIndex({ quantity: -1 })
+{ nIndexesWas: 4, ok: 1 }
+db.sales.createIndex({ item: 1 })
+
+
+
+db.sales.createIndex({ quantity: 1 })
+quantity_1
+db.sales.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { price: 1 }, name: 'price_1' },
+  { v: 2, key: { item: 1, price: 1 }, name: 'item_1_price_1' },
+  { v: 2, key: { item: 1 }, name: 'item_1' },
+  { v: 2, key: { quantity: 1 }, name: 'quantity_1' }
+]
+db.sales.dropIndexes()
+{
+  nIndexesWas: 5,
+  msg: 'non-_id indexes dropped for collection',
+  ok: 1
+}
+db.sales.getIndexes()
+[ { v: 2, key: { _id: 1 }, name: '_id_' } ]
