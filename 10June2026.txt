@@ -1,0 +1,266 @@
+mkdir C:\data\config
+mkdir C:\data\shard1
+mkdir C:\data\shard2
+
+
+Start Config Server
+"C:\Program Files\MongoDB\Server\8.3\bin\mongod.exe" --configsvr --replSet configReplSet --dbpath C:\data\config --port 27019
+
+
+Initialize Config Replica Set
+rs.initiate({
+  _id: "configReplSet",
+  configsvr: true,
+  members: [
+    {
+      _id: 0,
+      host: "localhost:27019"
+    }
+  ]
+})
+
+
+
+Start Shard 1
+"C:\Program Files\MongoDB\Server\8.3\bin\mongod.exe" --shardsvr --replSet shard1ReplSet --dbpath C:\data\shard1 --port 27011
+
+
+Initialize Shard 1
+rs.initiate({
+  _id: "shard1ReplSet",
+  members: [
+    {
+      _id: 0,
+      host: "localhost:27011"
+    }
+  ]
+})
+
+
+
+Start Shard 2
+"C:\Program Files\MongoDB\Server\8.3\bin\mongod.exe" --shardsvr --replSet shard2ReplSet --dbpath C:\data\shard2 --port 27012
+
+
+Initialize Shard 2
+rs.initiate({
+  _id: "shard2ReplSet",
+  members: [
+    {
+      _id: 0,
+      host: "localhost:27012"
+    }
+  ]
+})
+
+
+
+
+Start Mongos Router
+"C:\Program Files\MongoDB\Server\8.3\bin\mongos.exe" --configdb configReplSet/localhost:27019 --port 27017
+
+
+
+
+Rest all the operations performed on both the shards are mentioned below: 
+
+
+C:\Users\Anurag_Bhushan>mongosh --port 27017
+Current Mongosh Log ID: 6a2971a31119b2b449abc113
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.8.3
+Using MongoDB:          8.3.2
+Using Mongosh:          2.8.3
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2026-06-10T19:45:53.528+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+   2026-06-10T19:45:53.529+05:30: This server is bound to localhost. Remote systems will be unable to connect to this server. Start the server with --bind_ip <address> to specify which IP addresses it should serve responses from, or with --bind_ip_all to bind to all interfaces. If this behavior is desired, start the server with --bind_ip 127.0.0.1 to disable this warning
+------
+
+[direct: mongos] test> db.adminCommand({ hello: 1 })
+{
+  isWritablePrimary: true,
+  msg: 'isdbgrid',
+  topologyVersion: { processId: ObjectId('6a297199ff43d3d9c7d4f35e'), counter: Long('0') },
+  maxBsonObjectSize: 16777216,
+  maxMessageSizeBytes: 48000000,
+  maxWriteBatchSize: 100000,
+  localTime: ISODate('2026-06-10T14:16:12.556Z'),
+  logicalSessionTimeoutMinutes: 30,
+  connectionId: 10,
+  maxWireVersion: 28,
+  minWireVersion: 0,
+  ok: 1,
+  '$clusterTime': {
+    clusterTime: Timestamp({ t: 1781100965, i: 1 }),
+    signature: {
+      hash: Binary.createFromBase64('AAAAAAAAAAAAAAAAAAAAAAAAAAA=', 0),
+      keyId: Long('0')
+    }
+  },
+  operationTime: Timestamp({ t: 1781100965, i: 1 })
+}
+[direct: mongos] test> sh.addShard("shard1ReplSet/localhost:27011")
+{
+  shardAdded: 'shard1ReplSet',
+  ok: 1,
+  '$clusterTime': {
+    clusterTime: Timestamp({ t: 1781101032, i: 38 }),
+    signature: {
+      hash: Binary.createFromBase64('AAAAAAAAAAAAAAAAAAAAAAAAAAA=', 0),
+      keyId: Long('0')
+    }
+  },
+  operationTime: Timestamp({ t: 1781101032, i: 38 })
+}
+[direct: mongos] test> sh.addShard("shard2ReplSet/localhost:27012")
+{
+  shardAdded: 'shard2ReplSet',
+  ok: 1,
+  '$clusterTime': {
+    clusterTime: Timestamp({ t: 1781101055, i: 7 }),
+    signature: {
+      hash: Binary.createFromBase64('AAAAAAAAAAAAAAAAAAAAAAAAAAA=', 0),
+      keyId: Long('0')
+    }
+  },
+  operationTime: Timestamp({ t: 1781101055, i: 7 })
+}
+[direct: mongos] test> sh.enableSharding("eCommerceDB")
+{
+  ok: 1,
+  '$clusterTime': {
+    clusterTime: Timestamp({ t: 1781101078, i: 22 }),
+    signature: {
+      hash: Binary.createFromBase64('AAAAAAAAAAAAAAAAAAAAAAAAAAA=', 0),
+      keyId: Long('0')
+    }
+  },
+  operationTime: Timestamp({ t: 1781101078, i: 22 })
+}
+[direct: mongos] test> sh.shardCollection(
+|   "eCommerceDB.orders",
+|   { customer_id: "hashed" }
+| )
+{
+  collectionsharded: 'eCommerceDB.orders',
+  ok: 1,
+  '$clusterTime': {
+    clusterTime: Timestamp({ t: 1781101105, i: 15 }),
+    signature: {
+      hash: Binary.createFromBase64('AAAAAAAAAAAAAAAAAAAAAAAAAAA=', 0),
+      keyId: Long('0')
+    }
+  },
+  operationTime: Timestamp({ t: 1781101105, i: 15 })
+}
+[direct: mongos] test> use eCommerceDB
+switched to db eCommerceDB
+[direct: mongos] eCommerceDB> for(let i=0;i<1000;i++){
+|     db.orders.insertOne({
+|         customer_id:"cust_"+i,
+|         amount:Math.random()*100
+|     })
+| }
+{
+  acknowledged: true,
+  insertedId: ObjectId('6a2972581119b2b449abc4fb')
+}
+[direct: mongos] eCommerceDB> sh.status()
+shardingVersion
+{
+  _id: ObjectId('6a296f5e6fc82eb25b0adf45'),
+  clusterId: ObjectId('6a296f5e6fc82eb25b0adf44')
+}
+---
+shards
+[
+  {
+    _id: 'shard1ReplSet',
+    host: 'shard1ReplSet/localhost:27011',
+    topologyTime: Timestamp({ t: 1781101032, i: 12 }),
+    replSetConfigVersion: Long('-1')
+  },
+  {
+    _id: 'shard2ReplSet',
+    host: 'shard2ReplSet/localhost:27012',
+    topologyTime: Timestamp({ t: 1781101054, i: 33 }),
+    replSetConfigVersion: Long('-1')
+  }
+]
+---
+active mongoses
+[ { '8.3.2': 1 } ]
+---
+autosplit
+{ 'Currently enabled': 'yes' }
+---
+balancer
+{
+  'Currently enabled': 'yes',
+  'Currently running': 'no',
+  'Failed balancer rounds in last 5 attempts': 0,
+  'Migration Results for the last 24 hours': 'No recent migrations'
+}
+---
+shardedDataDistribution
+[
+  {
+    ns: 'eCommerceDB.orders',
+    shards: [
+      {
+        shardName: 'shard2ReplSet',
+        numOrphanedDocs: 0,
+        numOwnedDocuments: 509,
+        ownedSizeBytes: 32067,
+        orphanedSizeBytes: 0
+      },
+      {
+        shardName: 'shard1ReplSet',
+        numOrphanedDocs: 0,
+        numOwnedDocuments: 491,
+        ownedSizeBytes: 30933,
+        orphanedSizeBytes: 0
+      }
+    ]
+  }
+]
+---
+databases
+[
+  {
+    database: { _id: 'config', primary: 'config', partitioned: true },
+    collections: {}
+  },
+  {
+    database: {
+      _id: 'eCommerceDB',
+      primary: 'shard1ReplSet',
+      version: {
+        uuid: UUID('264fd75c-a790-45e7-a0f2-64fe9cc0778c'),
+        timestamp: Timestamp({ t: 1781101078, i: 10 }),
+        lastMod: 1
+      }
+    },
+    collections: {
+      'eCommerceDB.orders': {
+        shardKey: { customer_id: 'hashed' },
+        unique: false,
+        balancing: true,
+        allowMigrations: true,
+        chunkMetadata: [
+          { shard: 'shard1ReplSet', nChunks: 1 },
+          { shard: 'shard2ReplSet', nChunks: 1 }
+        ],
+        chunks: [
+          { min: { customer_id: MinKey() }, max: { customer_id: Long('0') }, 'on shard': 'shard2ReplSet', 'last modified': Timestamp({ t: 1, i: 0 }) },
+          { min: { customer_id: Long('0') }, max: { customer_id: MaxKey() }, 'on shard': 'shard1ReplSet', 'last modified': Timestamp({ t: 1, i: 1 }) }
+        ],
+        tags: []
+      }
+    }
+  }
+]
+[direct: mongos] eCommerceDB>
